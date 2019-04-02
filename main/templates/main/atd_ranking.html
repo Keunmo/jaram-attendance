@@ -1,0 +1,15 @@
+<html>
+    <head>
+        <title>Jaram Academy Attendance System</title>
+    </head>
+    <body>
+        <div>
+            <h1><a href="">Jaram Academy Attendance System</a></h1>
+        </div>
+        {% for member in member_lists %}
+            <div>
+                <p>이름 : {{ member.name }} // 출석횟수 : {{ member.atd_checked }} // 마지막 출석시간 : {{ member.last_checked }}</p>
+            </div>
+        {% endfor %}
+    </body>
+</html>
