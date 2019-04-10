@@ -10,6 +10,7 @@ class Member(models.Model):
     def atd_check(self):
         self.atd_checked = self.atd_checked + 1
         self.last_checked = timezone.now()
+        self.save()
 
     def __str__(self):
         return self.name
