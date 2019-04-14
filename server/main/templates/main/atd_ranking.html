@@ -10,7 +10,10 @@
     </head>
     <body>
         <div>
-            <h1>웹실 출석 순위</h1>
+            <h1><a href="">Jaram Academy Attendance System</a></h1>
+        </div>
+        <div>
+            <h3>Ranking</h3>
         </div>
         <table class="table table-striped">
             <thead>
@@ -36,5 +39,11 @@
                 {% endfor %}
             </tbody>
         </table>
+        <div>
+            <a href="ranking">더보기</a>
+        </div>
+        <div>
+            {% csrf_token %}
+        </div>
     </body>
 </html>

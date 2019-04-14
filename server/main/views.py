@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.views.decorators.csrf import csrf_exempt
+#from django.views.decorators.csrf import csrf_exempt
 
 from .models import Member
 
 import datetime
 
+@ensure_csrf_cookie
 
 def atd_ranking(request):
     member_lists = Member.objects.order_by('-atd_checked')
@@ -17,8 +18,8 @@ def full_ranking(request):
     member_lists = Member.objects.order_by('-atd_checked')
     return render(request, 'main/full_ranking.html', {'member_lists': member_lists})
 
-@ensure_csrf_cookie
-# @csrf_exempt
+#@ensure_csrf_cookie
+#@csrf_exempt
 def atd_check(request):
     if request.method == "POST":
         act_card_id = request.POST.get('card_id')
