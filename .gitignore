@@ -26,3 +26,6 @@ myvenv
 
 #editor
 .vscode
+
+# Mac Only
+.DS_Store
