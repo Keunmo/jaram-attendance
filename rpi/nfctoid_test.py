@@ -7,7 +7,7 @@ def scan_id():
     id = ['AD:CG:3F:4B', 'EF:5F:95:60', '3D:51:B9:9A', '25:DB:C0:A4', '4D:D0:56:7D']
     num = randint(0, len(id)-1)
     params = {'card': id[num]}
-    url = 'http://127.0.0.1:8000'
+    url = 'http://127.0.0.1:8000/chulseokcheck'
     s = requests.Session()
     r1 = s.get(url=url)
     csrf_token = r1.cookies['csrftoken']
