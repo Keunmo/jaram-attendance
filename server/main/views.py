@@ -4,10 +4,10 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 #from django.views.decorators.csrf import csrf_exempt
 
 from .models import Member
+import json
 
 import datetime
 
-@ensure_csrf_cookie
 
 def atd_ranking(request):
     member_lists = Member.objects.order_by('-atd_checked')
@@ -18,7 +18,7 @@ def full_ranking(request):
     member_lists = Member.objects.order_by('-atd_checked')
     return render(request, 'main/full_ranking.html', {'member_lists': member_lists})
 
-#@ensure_csrf_cookie
+@ensure_csrf_cookie
 #@csrf_exempt
 def atd_check(request):
     if request.method == "POST":
@@ -27,7 +27,7 @@ def atd_check(request):
             mem_lookup = Member.objects.get(card_id=act_card_id)
         except Member.DoesNotExist:
             mem_lookup = []
-        if mem_lookup:
+        if mem_lookup: # mem_lookup list not empty.
             # Registered
             personnel = mem_lookup
             last_date = personnel.last_checked
@@ -40,31 +40,46 @@ def atd_check(request):
             month_now = now[1]
             day_now = now[2]
 
+            converted_date_for_json = act_last_date.strftime('%Y-%m-%d %H:%M:%S')
             converted_date = act_last_date.strftime('%Y-%m-%d').split('-')
             year_checked = converted_date[0]
             month_checked = converted_date[1]
             day_checked = converted_date[2]
 
             # Already Checked
+            ''' The json that we're trying to return to RBP consists three values.
+                The three values are 'name', 'card_id', 'last_checked'.
+                We need card_id for the new members that are not on the Member DB for Registration Page.
+            '''
             if day_checked == day_now and \
                 month_checked == month_now and year_checked == year_now:
 
-                print(str(personnel) + '님은 오늘 이미 출석하셨습니다.// ' +
-                str(year_checked) + '년 ' + 
-                str(month_checked) + '월 ' + str(day_checked) + '일에 마지막으로 출석함')
+                output_str = str(personnel) + '님은 오늘 이미 출석하셨습니다.// ' + \
+                str(year_checked) + '년 ' + \
+                str(month_checked) + '월 ' + str(day_checked) + '일에 마지막으로 출석함'
+                print(output_str)
+                mem_info = {'name': str(personnel), 'card_id': personnel.card_id, 'last_checked': str(converted_date_for_json)}
+                mem_info_json = json.dumps(mem_info, ensure_ascii=False)
 
             # Not Checked Today    
             else:
                 personnel.atd_check()
-                print(str(personnel) + '님이 출석에 성공하였습니다.')
-            
+                output_str = str(personnel) + '님이 출석에 성공하였습니다.'
+                print(output_str)
+                mem_info = {'name': str(personnel), 'card_id': personnel.card_id, 'last_checked': str(converted_date_for_json)}
+                mem_info_json = json.dumps(mem_info, ensure_ascii=False)
 
-            return render(request, 'main/atd_check.html')
+
+            # return render(request, 'main/atd_check.html')
+            return HttpResponse(mem_info_json, content_type='application/json')
         else:
             # Not Registered
-            # 일단 얘는 출석 처리 안하는걸로...
+            # We do not count any of the members as checked.
             print('Card ID : ' + act_card_id +' Not Registered!!')
-            return render(request, 'main/atd_check.html')
+            mem_info = {'name': '', 'card_id': act_card_id, 'last_checked': str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))}
+            mem_info_json = json.dumps(mem_info, ensure_ascii=False)
+
+            return HttpResponse(mem_info_json, content_type='application/json')
 
     else:
         return render(request, 'main/atd_check.html')
