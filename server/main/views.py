@@ -33,7 +33,7 @@ def atd_check(request):
             last_date = personnel.last_checked
             KST = datetime.timedelta(hours=9)
             act_last_date = last_date + KST
-            
+
             # Duplicated Attendace Checker
             now = datetime.datetime.now().strftime('%Y-%m-%d').split('-')
             year_now = now[0]
@@ -46,11 +46,15 @@ def atd_check(request):
             month_checked = converted_date[1]
             day_checked = converted_date[2]
 
-            # Already Checked
             ''' The json that we're trying to return to RBP consists three values.
-                The three values are 'name', 'card_id', 'last_checked'.
+                The three values are 'status', 'name', 'card_id', 'last_checked'.
+                'status' is for to know which json is in certain case. For example, if we do not have the status value,
+                RBP's code will be difficult to recognize whether the owner of the card checked attendance today or not.
+                There are three status codes : CHECKED, FIRSTCHECK, UNREGISTERED
                 We need card_id for the new members that are not on the Member DB for Registration Page.
             '''
+
+            # Already Checked
             if day_checked == day_now and \
                 month_checked == month_now and year_checked == year_now:
 
@@ -58,7 +62,7 @@ def atd_check(request):
                 str(year_checked) + '년 ' + \
                 str(month_checked) + '월 ' + str(day_checked) + '일에 마지막으로 출석함'
                 print(output_str)
-                mem_info = {'name': str(personnel), 'card_id': personnel.card_id, 'last_checked': str(converted_date_for_json)}
+                mem_info = {'status': 'CHECKED', 'name': str(personnel), 'card_id': personnel.card_id, 'last_checked': str(converted_date_for_json)}
                 mem_info_json = json.dumps(mem_info, ensure_ascii=False)
 
             # Not Checked Today    
@@ -66,7 +70,7 @@ def atd_check(request):
                 personnel.atd_check()
                 output_str = str(personnel) + '님이 출석에 성공하였습니다.'
                 print(output_str)
-                mem_info = {'name': str(personnel), 'card_id': personnel.card_id, 'last_checked': str(converted_date_for_json)}
+                mem_info = {'status': 'FIRSTCHECK', 'name': str(personnel), 'card_id': personnel.card_id, 'last_checked': str(converted_date_for_json)}
                 mem_info_json = json.dumps(mem_info, ensure_ascii=False)
 
 
@@ -76,7 +80,7 @@ def atd_check(request):
             # Not Registered
             # We do not count any of the members as checked.
             print('Card ID : ' + act_card_id +' Not Registered!!')
-            mem_info = {'name': '', 'card_id': act_card_id, 'last_checked': str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))}
+            mem_info = {'status': 'UNREGISTERED', 'name': '', 'card_id': act_card_id, 'last_checked': str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))}
             mem_info_json = json.dumps(mem_info, ensure_ascii=False)
 
             return HttpResponse(mem_info_json, content_type='application/json')
