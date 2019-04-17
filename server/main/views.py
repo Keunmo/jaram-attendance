@@ -50,7 +50,10 @@ def atd_check(request):
                 The three values are 'status', 'name', 'card_id', 'last_checked'.
                 'status' is for to know which json is in certain case. For example, if we do not have the status value,
                 RBP's code will be difficult to recognize whether the owner of the card checked attendance today or not.
-                There are three status codes : CHECKED, FIRSTCHECK, UNREGISTERED
+                There are three status codes : 0, 1, 2
+                0 : Already checked today
+                1 : First time checking today
+                2 : Unregistered
                 We need card_id for the new members that are not on the Member DB for Registration Page.
             '''
 
@@ -62,7 +65,7 @@ def atd_check(request):
                 str(year_checked) + '년 ' + \
                 str(month_checked) + '월 ' + str(day_checked) + '일에 마지막으로 출석함'
                 print(output_str)
-                mem_info = {'status': 'CHECKED', 'name': str(personnel), 'card_id': personnel.card_id, 'last_checked': str(converted_date_for_json)}
+                mem_info = {'status': 0, 'name': str(personnel), 'card_id': personnel.card_id, 'last_checked': str(converted_date_for_json)}
                 mem_info_json = json.dumps(mem_info, ensure_ascii=False)
 
             # Not Checked Today    
@@ -70,7 +73,7 @@ def atd_check(request):
                 personnel.atd_check()
                 output_str = str(personnel) + '님이 출석에 성공하였습니다.'
                 print(output_str)
-                mem_info = {'status': 'FIRSTCHECK', 'name': str(personnel), 'card_id': personnel.card_id, 'last_checked': str(converted_date_for_json)}
+                mem_info = {'status': 1, 'name': str(personnel), 'card_id': personnel.card_id, 'last_checked': str(converted_date_for_json)}
                 mem_info_json = json.dumps(mem_info, ensure_ascii=False)
 
 
@@ -80,7 +83,7 @@ def atd_check(request):
             # Not Registered
             # We do not count any of the members as checked.
             print('Card ID : ' + act_card_id +' Not Registered!!')
-            mem_info = {'status': 'UNREGISTERED', 'name': '', 'card_id': act_card_id, 'last_checked': str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))}
+            mem_info = {'status': 2, 'name': '', 'card_id': act_card_id, 'last_checked': str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))}
             mem_info_json = json.dumps(mem_info, ensure_ascii=False)
 
             return HttpResponse(mem_info_json, content_type='application/json')
