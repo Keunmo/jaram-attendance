@@ -4,8 +4,8 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 #from django.views.decorators.csrf import csrf_exempt
 
 from .models import Member
-import json
 
+import json
 import datetime
 
 
@@ -89,4 +89,30 @@ def atd_check(request):
             return HttpResponse(mem_info_json, content_type='application/json')
 
     else:
+        a = request.GET.get('id', 'N')
         return render(request, 'main/atd_check.html')
+
+def register(request):
+    if request.method == "POST":
+        pass
+    else:
+        card_id = request.GET.get('id', 'N')
+        print(card_id)
+        if card_id == 'N':
+            print("Can't find Card ID.")
+            return render(request, 'main/404_error.html')
+        splited = card_id.split('58')
+        seperate = [[i[:len(i)//2], i[len(i)//2:]] for i in splited]
+        id_in_string = ''
+        list_a = []
+        for a in range(len(seperate)):
+            for b in range(len(seperate[a])):
+                list_a.append(seperate[a][b])
+        cracked_id = list(map(chr, list(map(int, list_a))))
+        # print(seperate)
+        # print(list_a)
+        # print(cracked_id)
+
+
+            
+    return render(request, 'main/registration.html', {'register': register})
