@@ -5,11 +5,11 @@ class Member(models.Model):
     card_id = models.CharField(max_length=64)
     name = models.CharField(max_length=32)
     atd_checked = models.IntegerField(default=1)
-    last_checked = models.DateTimeField(default=timezone.now)
+    last_checked = models.DateTimeField(default=timezone.localtime)
     
     def atd_check(self):
         self.atd_checked = self.atd_checked + 1
-        self.last_checked = timezone.now()
+        self.last_checked = timezone.localtime()
         self.save()
 
     def __str__(self):
