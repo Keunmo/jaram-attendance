@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response, redirect
+from django.template import RequestContext
 from django.http import HttpResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 #from django.views.decorators.csrf import csrf_exempt
@@ -8,6 +9,11 @@ from .models import Member
 import json
 import datetime
 
+
+def page_not_found(request):
+    res = render(request, "main/404.html", {})
+    res.status_code = 404
+    return res
 
 def atd_ranking(request):
     member_lists = Member.objects.order_by('-atd_checked')
@@ -97,22 +103,48 @@ def register(request):
         pass
     else:
         card_id = request.GET.get('id', 'N')
-        print(card_id)
         if card_id == 'N':
             print("Can't find Card ID.")
-            return render(request, 'main/404_error.html')
+            return render(request, 'main/404.html')
+
+        # Decode ascii
         splited = card_id.split('58')
         seperate = [[i[:len(i)//2], i[len(i)//2:]] for i in splited]
-        id_in_string = ''
         list_a = []
+
         for a in range(len(seperate)):
             for b in range(len(seperate[a])):
                 list_a.append(seperate[a][b])
-        cracked_id = list(map(chr, list(map(int, list_a))))
-        # print(seperate)
-        # print(list_a)
-        # print(cracked_id)
+        cracked_id_list = list(map(chr, list(map(int, list_a))))
+        cracked_id = ''
+        i = 1
+
+        for c in cracked_id_list:
+            if i % 2 == 1:
+                cracked_id += c
+                i += 1
+            else:
+                if i is not len(cracked_id_list):
+                    cracked_id += c
+                    cracked_id += ':'
+                    i += 1
+                else:
+                    cracked_id += c
+        '''
+        The code above is to make the str of ascii codes into just strs as they were before.
+        It will be hard to crack just the ascii codes, but we do know how long the str is, and
+        there is always a ':' between every two letters.
+        So, we crack the ascii strings with those two point above.
+            ###Example###
+            seperate(list) : [['50', '53'], ['68', '66'], ['67', '48'], ['65', '52']]
+            list_a(list) : ['50', '53', '68', '66', '67', '48', '65', '52']
+            cracked_id_list(list) : ['2', '5', 'D', 'B', 'C', '0', 'A', '4']
+            cracked_id(string) : 25:DB:C0:A4
+        '''
+        
+
+
 
 
             
-    return render(request, 'main/registration.html', {'register': register})
+    return render(request, 'main/registration.html', {'register_id': cracked_id})
