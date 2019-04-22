@@ -100,7 +100,10 @@ def atd_check(request):
 
 def register(request):
     if request.method == "POST":
-        pass
+        print('1')
+        name = request.POST.get('name', '')
+        new_member = Member(card_id='', name=name, atd_checked=1, 
+                                last_checked=datetime.datetime.now())
     else:
         card_id = request.GET.get('id', 'N')
         if card_id == 'N':
@@ -134,17 +137,22 @@ def register(request):
         The code above is to make the str of ascii codes into just strs as they were before.
         It will be hard to crack just the ascii codes, but we do know how long the str is, and
         there is always a ':' between every two letters.
-        So, we crack the ascii strings with those two point above.
+        So, we crack the ascii strings with those two points above.
             ###Example###
             seperate(list) : [['50', '53'], ['68', '66'], ['67', '48'], ['65', '52']]
             list_a(list) : ['50', '53', '68', '66', '67', '48', '65', '52']
             cracked_id_list(list) : ['2', '5', 'D', 'B', 'C', '0', 'A', '4']
             cracked_id(string) : 25:DB:C0:A4
         '''
-        
+        new_member = Member(card_id=cracked_id)
+        print('2')
 
-
-
-
+    new_member.save()
+    
+    # Test Code for Registration
+    try:
+        new_member_check = Member.objects.get(name=name)
+    except Member.DoesNotExist:
+        print("Member is not Registered Taewan.... Work harder")
             
     return render(request, 'main/registration.html', {'register_id': cracked_id})
