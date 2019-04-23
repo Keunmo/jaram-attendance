@@ -2,6 +2,7 @@ from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
 from django.http import HttpResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils import timezone
 #from django.views.decorators.csrf import csrf_exempt
 
 from .models import Member
@@ -9,6 +10,7 @@ from .models import Member
 import json
 import datetime
 
+cracked_id = ''
 
 def page_not_found(request):
     res = render(request, "main/404.html", {})
@@ -99,11 +101,13 @@ def atd_check(request):
         return render(request, 'main/atd_check.html')
 
 def register(request):
+    global cracked_id
     if request.method == "POST":
-        print('1')
-        name = request.POST.get('name', '')
-        new_member = Member(card_id='', name=name, atd_checked=1, 
-                                last_checked=datetime.datetime.now())
+        name = request.POST.get('name', '안전코딩 안하냐?')
+        new_member = Member(card_id=cracked_id, name=name, atd_checked=1, 
+                                last_checked=timezone.now())
+        new_member.save()
+        return render(request, 'main/reg_complete.html', {})
     else:
         card_id = request.GET.get('id', 'N')
         if card_id == 'N':
@@ -119,7 +123,6 @@ def register(request):
             for b in range(len(seperate[a])):
                 list_a.append(seperate[a][b])
         cracked_id_list = list(map(chr, list(map(int, list_a))))
-        cracked_id = ''
         i = 1
 
         for c in cracked_id_list:
@@ -144,15 +147,4 @@ def register(request):
             cracked_id_list(list) : ['2', '5', 'D', 'B', 'C', '0', 'A', '4']
             cracked_id(string) : 25:DB:C0:A4
         '''
-        new_member = Member(card_id=cracked_id)
-        print('2')
-
-    new_member.save()
-    
-    # Test Code for Registration
-    try:
-        new_member_check = Member.objects.get(name=name)
-    except Member.DoesNotExist:
-        print("Member is not Registered Taewan.... Work harder")
-            
-    return render(request, 'main/registration.html', {'register_id': cracked_id})
+        return render(request, 'main/registration.html', {'register_id': cracked_id})
