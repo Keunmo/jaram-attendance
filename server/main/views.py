@@ -26,8 +26,8 @@ def full_ranking(request):
     member_lists = Member.objects.order_by('-atd_checked')
     return render(request, 'main/full_ranking.html', {'member_lists': member_lists})
 
-@ensure_csrf_cookie
 #@csrf_exempt
+@ensure_csrf_cookie
 def atd_check(request):
     if request.method == "POST":
         act_card_id = request.POST.get('card_id')
@@ -85,7 +85,6 @@ def atd_check(request):
                 mem_info_json = json.dumps(mem_info, ensure_ascii=False)
 
 
-            # return render(request, 'main/atd_check.html')
             return HttpResponse(mem_info_json, content_type='application/json')
         else:
             # Not Registered
@@ -100,15 +99,28 @@ def atd_check(request):
         a = request.GET.get('id', 'N')
         return render(request, 'main/atd_check.html')
 
+@ensure_csrf_cookie
 def register(request):
     global cracked_id
     if request.method == "POST":
-        name = request.POST.get('name', '안전코딩 안하냐?')
-        new_member = Member(card_id=cracked_id, name=name, atd_checked=1, 
+        name = request.POST.get('name', 'NaN')
+        try:
+            mem_lookup = Member.objects.get(card_id=cracked_id)
+        except Member.DoesNotExist:
+            # ID Not Registered. Proceed Registration.
+            new_member = Member(card_id=cracked_id, name=name, atd_checked=1, 
                                 last_checked=timezone.now())
-        new_member.save()
-        return render(request, 'main/reg_complete.html', {})
+            new_member.save()
+            cracked_id = ''
+            return render(request, 'main/reg_complete.html', {})
+        
+        print('Already Registered')
+        # ID is already registered.
+        return render(request, 'main/reg_incomplete.html', {})
     else:
+        # Initialize Global Variable
+        cracked_id = ''
+        #Get Encrypted Card ID
         card_id = request.GET.get('id', 'N')
         if card_id == 'N':
             print("Can't find Card ID.")
