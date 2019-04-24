@@ -1,13 +1,21 @@
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response, redirect
+from django.template import RequestContext
 from django.http import HttpResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils import timezone
 #from django.views.decorators.csrf import csrf_exempt
 
 from .models import Member
-import json
 
+import json
 import datetime
 
+cracked_id = ''
+
+def page_not_found(request):
+    res = render(request, "main/404.html", {})
+    res.status_code = 404
+    return res
 
 def atd_ranking(request):
     member_lists = Member.objects.order_by('-atd_checked')
@@ -18,8 +26,8 @@ def full_ranking(request):
     member_lists = Member.objects.order_by('-atd_checked')
     return render(request, 'main/full_ranking.html', {'member_lists': member_lists})
 
-@ensure_csrf_cookie
 #@csrf_exempt
+@ensure_csrf_cookie
 def atd_check(request):
     if request.method == "POST":
         act_card_id = request.POST.get('card_id')
@@ -77,7 +85,6 @@ def atd_check(request):
                 mem_info_json = json.dumps(mem_info, ensure_ascii=False)
 
 
-            # return render(request, 'main/atd_check.html')
             return HttpResponse(mem_info_json, content_type='application/json')
         else:
             # Not Registered
@@ -89,4 +96,67 @@ def atd_check(request):
             return HttpResponse(mem_info_json, content_type='application/json')
 
     else:
+        a = request.GET.get('id', 'N')
         return render(request, 'main/atd_check.html')
+
+@ensure_csrf_cookie
+def register(request):
+    global cracked_id
+    if request.method == "POST":
+        name = request.POST.get('name', 'NaN')
+        try:
+            mem_lookup = Member.objects.get(card_id=cracked_id)
+        except Member.DoesNotExist:
+            # ID Not Registered. Proceed Registration.
+            new_member = Member(card_id=cracked_id, name=name, atd_checked=1, 
+                                last_checked=timezone.now())
+            new_member.save()
+            cracked_id = ''
+            return render(request, 'main/reg_complete.html', {})
+        
+        print('Already Registered')
+        # ID is already registered.
+        return render(request, 'main/reg_incomplete.html', {})
+    else:
+        # Initialize Global Variable
+        cracked_id = ''
+        #Get Encrypted Card ID
+        card_id = request.GET.get('id', 'N')
+        if card_id == 'N':
+            print("Can't find Card ID.")
+            return render(request, 'main/404.html')
+
+        # Decode ascii
+        splited = card_id.split('58')
+        seperate = [[i[:len(i)//2], i[len(i)//2:]] for i in splited]
+        list_a = []
+
+        for a in range(len(seperate)):
+            for b in range(len(seperate[a])):
+                list_a.append(seperate[a][b])
+        cracked_id_list = list(map(chr, list(map(int, list_a))))
+        i = 1
+
+        for c in cracked_id_list:
+            if i % 2 == 1:
+                cracked_id += c
+                i += 1
+            else:
+                if i is not len(cracked_id_list):
+                    cracked_id += c
+                    cracked_id += ':'
+                    i += 1
+                else:
+                    cracked_id += c
+        '''
+        The code above is to make the str of ascii codes into just strs as they were before.
+        It will be hard to crack just the ascii codes, but we do know how long the str is, and
+        there is always a ':' between every two letters.
+        So, we crack the ascii strings with those two points above.
+            ###Example###
+            seperate(list) : [['50', '53'], ['68', '66'], ['67', '48'], ['65', '52']]
+            list_a(list) : ['50', '53', '68', '66', '67', '48', '65', '52']
+            cracked_id_list(list) : ['2', '5', 'D', 'B', 'C', '0', 'A', '4']
+            cracked_id(string) : 25:DB:C0:A4
+        '''
+        return render(request, 'main/registration.html', {'register_id': cracked_id})

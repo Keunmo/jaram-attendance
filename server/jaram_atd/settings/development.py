@@ -6,7 +6,7 @@ from jaram_atd.util import get_server_info_value
 SETTING_PRD_DIC = get_server_info_value("development")
 SECRET_KEY = SETTING_PRD_DIC["SECRET_KEY"]
 
-DEBUG = True
+DEBUG = False
 
 INSTALLED_APPS += []
 
