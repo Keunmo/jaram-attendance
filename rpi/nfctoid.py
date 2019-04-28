@@ -4,6 +4,8 @@ from adafruit_pn532.spi import PN532_SPI
 import board
 import busio
 import requests
+import gTTS
+
 
 # harware reset
 reset_pin = DigitalInOut(board.D6)
