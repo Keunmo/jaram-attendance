@@ -96,7 +96,6 @@ def atd_check(request):
             return HttpResponse(mem_info_json, content_type='application/json')
 
     else:
-        a = request.GET.get('id', 'N')
         return render(request, 'main/atd_check.html')
 
 @ensure_csrf_cookie
