@@ -1,6 +1,7 @@
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(os.path.abspath(__file__))))
+ROOT_DIR = os.path.dirname(BASE_DIR)
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -67,5 +68,12 @@ USE_L10N = True
 
 USE_TZ = True
 
+X_FRAME_OPTIONS = 'ALLOWALL'
+
+XS_SHARING_ALLOWED_METHODS = ['POST','GET','OPTIONS', 'PUT', 'DELETE']
 
 STATIC_URL = '/static/'
+
+STATIC_DIR = os.path.join(BASE_DIR, 'static/')
+
+STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')

@@ -12,7 +12,7 @@ import datetime
 
 cracked_id = ''
 
-def page_not_found(request):
+def page_not_found(request, exception):
     res = render(request, "main/404.html", {})
     res.status_code = 404
     return res
@@ -54,8 +54,8 @@ def atd_check(request):
             month_checked = converted_date[1]
             day_checked = converted_date[2]
 
-            ''' The json that we're trying to return to RBP consists three values.
-                The three values are 'status', 'name', 'card_id', 'last_checked'.
+            ''' The json that we're trying to return to RBP consists four values.
+                The four values are 'status', 'name', 'card_id', 'last_checked'.
                 'status' is for to know which json is in certain case. For example, if we do not have the status value,
                 RBP's code will be difficult to recognize whether the owner of the card checked attendance today or not.
                 There are three status codes : 0, 1, 2
@@ -96,7 +96,6 @@ def atd_check(request):
             return HttpResponse(mem_info_json, content_type='application/json')
 
     else:
-        a = request.GET.get('id', 'N')
         return render(request, 'main/atd_check.html')
 
 @ensure_csrf_cookie
@@ -113,8 +112,7 @@ def register(request):
             new_member.save()
             cracked_id = ''
             return render(request, 'main/reg_complete.html', {})
-        
-        print('Already Registered')
+
         # ID is already registered.
         return render(request, 'main/reg_incomplete.html', {})
     else:
