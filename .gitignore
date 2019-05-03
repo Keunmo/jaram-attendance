@@ -6,7 +6,8 @@ __pycache__/
 local_settings.py
 db.sqlite3
 *.db
-
+#static_root
+server/.static_root
 # pyenv
 .python-version
 
