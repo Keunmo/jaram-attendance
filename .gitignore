@@ -7,6 +7,9 @@ local_settings.py
 db.sqlite3
 *.db
 
+# Static files
+server/.static_root
+
 # pyenv
 .python-version
 
@@ -21,6 +24,9 @@ venv.bak/
 jr-atd-env
 myvenv
 
+# Production
+server/run/
+
 #secret key
 .config_secret
 
@@ -29,3 +35,4 @@ myvenv
 
 # Mac Only
 .DS_Store
+
