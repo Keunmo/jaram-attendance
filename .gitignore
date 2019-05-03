@@ -21,6 +21,9 @@ venv.bak/
 jr-atd-env
 myvenv
 
+# Production
+server/run/
+
 #secret key
 .config_secret
 
@@ -29,3 +32,4 @@ myvenv
 
 # Mac Only
 .DS_Store
+

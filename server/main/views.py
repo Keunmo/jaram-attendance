@@ -12,7 +12,7 @@ import datetime
 
 cracked_id = ''
 
-def page_not_found(request):
+def page_not_found(request, exception):
     res = render(request, "main/404.html", {})
     res.status_code = 404
     return res
