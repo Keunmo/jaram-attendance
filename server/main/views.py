@@ -9,8 +9,9 @@ from .models import Member
 
 import json
 import datetime
+import base64
 
-cracked_id = ''
+decoded_id = ''
 
 def page_not_found(request, exception):
     res = render(request, "main/404.html", {})
@@ -92,7 +93,7 @@ def atd_check(request):
             print('Card ID : ' + act_card_id +' Not Registered!!')
             mem_info = {'status': 2, 'name': '', 'card_id': act_card_id, 'last_checked': str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))}
             mem_info_json = json.dumps(mem_info, ensure_ascii=False)
-
+           
             return HttpResponse(mem_info_json, content_type='application/json')
 
     else:
@@ -100,61 +101,31 @@ def atd_check(request):
 
 @ensure_csrf_cookie
 def register(request):
-    global cracked_id
+    global decoded_id
     if request.method == "POST":
         name = request.POST.get('name', 'NaN')
         try:
-            mem_lookup = Member.objects.get(card_id=cracked_id)
+            mem_lookup = Member.objects.get(card_id=decoded_id)
         except Member.DoesNotExist:
             # ID Not Registered. Proceed Registration.
-            new_member = Member(card_id=cracked_id, name=name, atd_checked=1, 
+            new_member = Member(card_id=decoded_id, name=name, atd_checked=1, 
                                 last_checked=timezone.now())
             new_member.save()
-            cracked_id = ''
+            decoded_id = ''
             return render(request, 'main/reg_complete.html', {})
 
         # ID is already registered.
         return render(request, 'main/reg_incomplete.html', {})
     else:
         # Initialize Global Variable
-        cracked_id = ''
-        #Get Encrypted Card ID
-        card_id = request.GET.get('id', 'N')
-        if card_id == 'N':
+        decoded_id = ''
+        #Get Encoded Card ID
+        encoded_id = request.GET.get('id', 'N')
+        if encoded_id == 'N':
             print("Can't find Card ID.")
             return render(request, 'main/404.html')
+        # Decode base64
+        decoded_id = base64.b64decode(encoded_id).decode('utf-8')
+        
+        return render(request, 'main/registration.html', {'register_id': decoded_id})
 
-        # Decode ascii
-        splited = card_id.split('58')
-        seperate = [[i[:len(i)//2], i[len(i)//2:]] for i in splited]
-        list_a = []
-
-        for a in range(len(seperate)):
-            for b in range(len(seperate[a])):
-                list_a.append(seperate[a][b])
-        cracked_id_list = list(map(chr, list(map(int, list_a))))
-        i = 1
-
-        for c in cracked_id_list:
-            if i % 2 == 1:
-                cracked_id += c
-                i += 1
-            else:
-                if i is not len(cracked_id_list):
-                    cracked_id += c
-                    cracked_id += ':'
-                    i += 1
-                else:
-                    cracked_id += c
-        '''
-        The code above is to make the str of ascii codes into just strs as they were before.
-        It will be hard to crack just the ascii codes, but we do know how long the str is, and
-        there is always a ':' between every two letters.
-        So, we crack the ascii strings with those two points above.
-            ###Example###
-            seperate(list) : [['50', '53'], ['68', '66'], ['67', '48'], ['65', '52']]
-            list_a(list) : ['50', '53', '68', '66', '67', '48', '65', '52']
-            cracked_id_list(list) : ['2', '5', 'D', 'B', 'C', '0', 'A', '4']
-            cracked_id(string) : 25:DB:C0:A4
-        '''
-        return render(request, 'main/registration.html', {'register_id': cracked_id})
