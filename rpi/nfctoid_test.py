@@ -19,7 +19,7 @@ def scan_id():
     print(r2.status_code, r2.reason)
     print(r2.text)
 
-    if r2.text[11] == '2':
+    if json.loads(r2.text)['status'] == 2:
         encoded_card_id = base64.b64encode(generated_id.encode('utf-8'))
         registration.registration(encoded_card_id)
     #return id[num]

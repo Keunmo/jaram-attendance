@@ -93,7 +93,7 @@ def atd_check(request):
             print('Card ID : ' + act_card_id +' Not Registered!!')
             mem_info = {'status': 2, 'name': '', 'card_id': act_card_id, 'last_checked': str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))}
             mem_info_json = json.dumps(mem_info, ensure_ascii=False)
-           
+
             return HttpResponse(mem_info_json, content_type='application/json')
 
     else:
@@ -128,4 +128,3 @@ def register(request):
         decoded_id = base64.b64decode(encoded_id).decode('utf-8')
         
         return render(request, 'main/registration.html', {'register_id': decoded_id})
-
