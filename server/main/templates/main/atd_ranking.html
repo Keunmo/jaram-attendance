@@ -46,7 +46,10 @@
             </tbody>
         </table>
         <div>
-            <a href="ranking">더보기</a>
+            <a href="/ranking">더보기</a>
+        </div>
+        <div>
+            <a href="{% url 'logout' %}">로그아웃</a>
         </div>
         <div>
             {% csrf_token %}
