@@ -1,23 +1,52 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="ko">
     <head>
         <title>Jaram Academy Attendance System</title>
         <meta charset="utf-8">
+        
+        <!-- Bootstrap import -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+        
+        <!-- Favicon and Etc... -->
         <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png">
         <link rel="manifest" href="/static/manifest.webmanifest">
         <link rel="mask-icon" href="/static/icons/safari-pinned-tab.svg" color="#5bbad5">
         <meta name="theme-color" content="#ffffff">
+        
+        <link rel="stylesheet" href="{% static 'css/login.css' %}">
     </head>
     <body>
-        <h1>Login</h1>
-        <form action="/" method="POST">
-            {% csrf_token %}
-            <div>{{ error }}</div>
-            Username : <input type="text" name="username" placeholder="Enter Username" required/>
-            Password : <input type="password" name="password" placeholder="Enter Password" required/>
-            <input type="submit" value="Login"/>
-        </form>
+        <div class="container">
+            <h1>Login</h1>
+            <form action="/" method="POST">
+                {% csrf_token %}
+                <div>{{ error }}</div>
+                <fieldset class="form-group">
+                    <label for="username" class="bmd-label-floating">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                    <span class="bmd-help">Enter Username</span>
+                </fieldset>
+                <fieldset class="form-group">
+                    <label for="password" class="bmd-label-floating">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                    <span class="bmd-help">The Password that "Everybody" knows.</span>
+                </fieldset>
+                <button type="submit" class="btn btn-primary btn-raised">
+                    Login
+                    <div class="ripple-container"></div>
+                </button>
+            </form>
+        </div>
+        
+        <!-- Bootstrap js -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+        <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
     </body>
 </html>
