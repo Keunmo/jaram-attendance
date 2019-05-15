@@ -1,11 +1,81 @@
-.btn.btn-raised.btn-primary {
-    color: #fff;
-    background-color: #3f51b5;
-    border-color: #3f51b5;
+div#a {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+.container {
+    box-shadow: 
+        0px 1px 5px 0px rgba(0,0,0,0.2),
+        0px 2px 2px 0px rgba(0,0,0,0.14), 
+        0px 3px 1px -2px rgba(0,0,0,0.12);
+    position: relative;
+    padding: 8px 12px 12px;
+    margin-top: 64px;
+    align-items: center;
+    flex-direction: column;
+    box-sizing: inherit;
+    border-radius: 4px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-top: 40px;
+    padding-right: 50px;
+    padding-left: 50px;
 }
 
-.btn.btn-raised.btn-primary:hover {
-    color: #fff;
-    background-color: #495bc0;
-    border-color: #2f3d88;
+.btn.btn-raised.btn-primary {
+    color: #fff !important;
+    background-color: #3f51b5 !important;
+    border-color: #3f51b5 !important;
+}
+
+.btn.btn-raised.btn-primary:active {
+    color: #fff !important;
+    background-color: #495bc0 !important;
+    border-color: #2f3d88 !important;
+}
+
+.form-control, .is-focused .form-control {
+    background-image:
+        linear-gradient(0deg,#3f51b5 2px,rgba(63,81,181,0) 0),
+        linear-gradient(0deg,rgba(0,0,0,.26) 1px,transparent 0) !important;
+}
+
+.is-focused > .bmd-label-floating {
+    color: #3f51b5 !important;
+}
+
+.btn.btn-raised.btn-primary {
+    margin-top: 24px;
+    width: 100% !important;
+    align-items: center !important;
+}
+
+@media (max-width: 450px) {
+    .container{
+        padding-right: 20px;
+        padding-left: 20px;
+    }
+}
+
+@media (min-width: 500px) {
+    .container {
+        width: 450px;
+    }
+}
+
+@media (min-width: 768px) {
+.container {
+        width: 450px;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        width: 450px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container {
+        width: 450px;
+    }
 }
