@@ -1,4 +1,3 @@
-import sqlite3
 #import nfctoid
 
 def registration(card_id):
