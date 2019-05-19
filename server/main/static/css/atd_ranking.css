@@ -1,0 +1,54 @@
+body, html {
+    height: 100%;
+}
+
+.container {
+    margin-right: auto;
+    margin-left: auto;
+    padding: 0;
+    width: 100%
+}
+
+.navbar {
+    background-color: rgb(63,81,181);
+    width: 100%;
+}
+
+.navbar-toggler {
+    border: 0;
+    outline: 0;
+    color: rgb(255,255,255);
+}
+
+.material-icons {
+    font-size: 30px;
+}
+
+.nav-link {
+    font-size: 1.2rem !important;
+}
+
+.table { 
+    margin-top: 10px;
+}
+
+#ranking {
+    text-transform: none;
+    color: rgb(255,255,255);
+}
+
+#more-rank {
+    float: right;
+}
+
+@media only screen and (max-width: 426px) {
+    body { 
+        font-size: 0.8em; 
+    }
+}
+
+@media only screen and (max-width: 360px) {
+    body { 
+        font-size: 0.6em;
+    }
+}

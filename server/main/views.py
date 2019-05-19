@@ -1,6 +1,9 @@
 from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
 from django.http import HttpResponse
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.contrib import auth
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils import timezone
 #from django.views.decorators.csrf import csrf_exempt
@@ -18,11 +21,13 @@ def page_not_found(request, exception):
     res.status_code = 404
     return res
 
+@login_required(redirect_field_name='',login_url='/')
 def atd_ranking(request):
     member_lists = Member.objects.order_by('-atd_checked')
     member_lists = member_lists[:5]
     return render(request, 'main/atd_ranking.html', {'member_lists': member_lists})
 
+@login_required(redirect_field_name='',login_url='/')
 def full_ranking(request):
     member_lists = Member.objects.order_by('-atd_checked')
     return render(request, 'main/full_ranking.html', {'member_lists': member_lists})
@@ -93,7 +98,7 @@ def atd_check(request):
             print('Card ID : ' + act_card_id +' Not Registered!!')
             mem_info = {'status': 2, 'name': '', 'card_id': act_card_id, 'last_checked': str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))}
             mem_info_json = json.dumps(mem_info, ensure_ascii=False)
-           
+
             return HttpResponse(mem_info_json, content_type='application/json')
 
     else:
@@ -129,3 +134,20 @@ def register(request):
         
         return render(request, 'main/registration.html', {'register_id': decoded_id})
 
+@ensure_csrf_cookie
+def login(request):
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        user = auth.authenticate(request, username=username, password=password)
+        if user:
+            auth.login(request, user)
+            return redirect('atd_ranking')
+        else:
+            return render(request, 'main/login.html', {'error': 'Username or Password incorrect.'})
+    else:
+        return render(request, 'main/login.html')
+
+def logout(request):
+    auth.logout(request)
+    return redirect('login')

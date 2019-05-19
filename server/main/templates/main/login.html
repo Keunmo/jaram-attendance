@@ -17,26 +17,31 @@
         <link rel="manifest" href="/static/manifest.webmanifest">
         <link rel="mask-icon" href="/static/icons/safari-pinned-tab.svg" color="#5bbad5">
         <meta name="theme-color" content="#ffffff">
-
-        <link rel="stylesheet" href="{% static 'css/registration.css' %}">
+        
+        <link rel="stylesheet" href="{% static 'css/login.css' %}">
     </head>
     <body>
         <div id="a">
             <div class="container">
                 <center>
-                    <h1>Attendance System Registration Page</h1>
+                    <h1>Login</h1>
                 </center>
-                <form action="/register/" method="POST">
+                <form action="/" method="POST">
                     {% csrf_token %}
-                    <input type="hidden" id="card_id" name="card_id" value={{ register_id }}>
+                    <div>{{ error }}</div>
                     <div class="form-group">
-                        <label for="name" class="bmd-label-floating">Name</label>
-                        <input type="text" id="name" class="form-control" name="name" required/>
-                        <span class="bmd-help">Enter your name</span>
+                        <label for="username" class="bmd-label-floating">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                        <span class="bmd-help">Enter Username</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="bmd-label-floating">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                        <span class="bmd-help">The Password that "Everybody" knows.</span>
                     </div>
                     <button type="submit" class="btn btn-primary btn-raised">
-                        Register
-                        <div class="ripple=container"></div>
+                        Login
+                        <div class="ripple-container"></div>
                     </button>
                 </form>
             </div>
