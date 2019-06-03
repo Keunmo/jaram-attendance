@@ -1,49 +1,80 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="ko">
     <head>
         <title>Jaram Academy Attendance System</title>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        
+        <!-- Bootstrap import -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+        
+        <!-- Favicon and Etc... -->
         <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png">
         <link rel="manifest" href="/static/manifest.webmanifest">
         <link rel="mask-icon" href="/static/icons/safari-pinned-tab.svg" color="#5bbad5">
         <meta name="theme-color" content="#ffffff">
+
+        <link rel="stylesheet" href="{% static 'css/full_ranking.css' %}">
     </head>
     <body>
-        <div>
-            <h1>웹실 출석 순위</h1>
-        </div>
-        <table class="table table-striped">
-            <thead>
-            <!-- <tr> 가로줄 만드는 역할 -->
-            <!-- <td> 는 셀을 만드는 역할... -->
-            <tr>
-                <td><b>등수</b></td>
-                <td><b>이름</b></td>
-                <td><b>출석한 횟수</b></td>
-                <td><b>마지막 출석일</b></td>
-            </tr>
-            </thead>
-            <tbody>
-                <script>var num = 1;</script>
-                {% for member in member_lists %}
-                <tr>
-                    <td><script>document.write(num);</script></td>
-                    <td>{{ member.name }}</td>
-                    <td>{{ member.atd_checked }}</td>
-                    <td>{{ member.last_checked }}</td>
-                    <script>num++;</script>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <div>
-            {% csrf_token %}
+        <div class="bmd-layout-container bmd-drawer-f-l bmd-drawer-overlay">
+            <header class="bmd-layout-header">
+                <div class="navbar">
+                    <button class="navbar-toggler" type="button" data-toggle="drawer" data-target="#dw-p3">
+                        <span class="sr-only">Toggle drawer</span>
+                        <i class="material-icons">menu</i>
+                    </button>
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" id="ranking" href="/main">Ranking</a>
+                        </li>
+                    </ul>
+                </div>
+            </header>
+            <div id="dw-p3" class="bmd-layout-drawer">
+                <ul class="list-group">
+                    <a class="list-group-item" href="https://jaram.net/">Jaram</a>
+                    <a class="list-group-item" href="https://github.com/Keunmo/jaram-attendance/">Github</a>
+                    <a class="list-group-item">License</a>
+                    <a class="list-group-item">Contact Us</a>
+                    <a class="list-group-item" href="{% url 'logout' %}">Logout</a>
+                </ul>
+            </div>
+            <main class="bmd-layout-content">
+                <table class="table table-striped">
+                    <thead>
+                    <!-- <tr> 가로줄 만드는 역할 -->
+                    <!-- <td> 는 셀을 만드는 역할... -->
+                    <tr>
+                        <td><b>등수</b></td>
+                        <td><b>이름</b></td>
+                        <td><b>출석한 횟수</b></td>
+                        <td><b>마지막 출석일</b></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <script>var num = 1;</script>
+                        {% for member in member_lists %}
+                        <tr>
+                            <td><script>document.write(num);</script></td>
+                            <td>{{ member.name }}</td>
+                            <td>{{ member.atd_checked }}</td>
+                            <td>{{ member.last_checked }}</td>
+                            <script>num++;</script>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </main>
         </div>
     </body>
+    <!-- Bootstrap js -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+    <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
 </html>
