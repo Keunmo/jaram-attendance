@@ -13,6 +13,9 @@ from .models import Member
 import json
 import datetime
 import base64
+import qrcode
+
+from PIL import Image
 
 decoded_id = ''
 
@@ -151,3 +154,40 @@ def login(request):
 def logout(request):
     auth.logout(request)
     return redirect('login')
+
+def register_with_qrcode(request):
+    if request.method == "GET":
+        # Need Base64 Encryption
+        card_id = request.GET.get('id', 'N')
+        if card_id == "N":
+            print("Can't find Card ID.")
+            return render(request, 'main/404.html')
+
+        reg_address = 'http://127.0.0.1:3000/register?id=' + card_id
+        # reg_address = 'http://attendance.jaram.net/register?id=' + card_id
+        print(reg_address)        
+
+        qr = qrcode.QRCode(
+                version=1,
+                error_correction=qrcode.constants.ERROR_CORRECT_L,
+                box_size=14,
+                border=4,
+            )
+        qr.add_data(reg_address)
+        qr.make(fit=True)
+
+        img_str = "qrimage_" + card_id
+        print(img_str)
+        
+        img_str = img_str + '.png'
+        img = qr.make_image()
+        img.save('./main/media/' + img_str, 'PNG')
+        qr.clear()
+        
+        print(img)
+
+
+
+        return render(request, 'main/qrcode.html')
+
+    return render(request, 'main/qrcode.html')

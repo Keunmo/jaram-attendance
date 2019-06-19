@@ -5,7 +5,7 @@ import registration
 '''This code is only for testing. It returns fake nfc id.'''
 
 def scan_id():
-    id = ['AD:CG:3F:4B', 'EF:5F:95:60', '3D:51:B9:9A', '25:DB:C0:A4', '4D:D0:56:7D', 'BF:7E:48:5C', '5F:4C:G7:47:89']
+    id = ['AD:CG:3F:4B', 'EF:5F:95:60', '3D:51:B9:9A', '25:DB:C0:A4', '4D:D0:56:7D']
     num = randint(0, len(id)-1)
     # params = {'card_id': id[num]}
     # url = 'http://127.0.0.1:8000/register/'
@@ -19,6 +19,7 @@ def scan_id():
     print(r2.status_code, r2.reason)
     print(r2.text)
 
+    # Get status code and register
     if json.loads(r2.text)['status'] == 2:
         encoded_card_id = base64.b64encode(generated_id.encode('utf-8'))
         registration.registration(encoded_card_id)
