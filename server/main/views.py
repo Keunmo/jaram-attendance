@@ -177,17 +177,12 @@ def register_with_qrcode(request):
         qr.make(fit=True)
 
         img_str = "qrimage_" + card_id
-        print(img_str)
-        
         img_str = img_str + '.png'
+
         img = qr.make_image()
-        img.save('./main/media/' + img_str, 'PNG')
+        img.save('./main/static/qrimg/' + img_str, 'PNG')
         qr.clear()
-        
-        print(img)
 
+        return render(request, 'main/qrcode.html', {'img_name': img_str})
 
-
-        return render(request, 'main/qrcode.html')
-
-    return render(request, 'main/qrcode.html')
+    return render(request, 'main/404.html')
