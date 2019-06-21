@@ -7,14 +7,13 @@
         <link rel="stylesheet" href="{% static 'css/qrcode.css' %}">
     </head>
     <body>
-        <h1>
-            You Are Not Registered.
-        </h1>
-        <h3>
-            Please register your card via QR Code below.
-        </h3>
-        <div>
-            <img src="/static/qrimg/{{ img_name }}">
+        <div id='container'>
+            <h1>
+                Register Here ->
+            </h1>
+            <div >
+                <img src="/static/qrimg/{{ img_name }}">
+            </div>
         </div>
     </body>
 </html>
