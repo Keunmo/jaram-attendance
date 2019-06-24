@@ -37,6 +37,8 @@
             </header>
             <div id="dw-p3" class="bmd-layout-drawer">
                 <ul class="list-group">
+                    <a class="list-group-item" href="/main/">Home</a>
+                    <a class="list-group-item" href="/ranking/">Ranking</a>
                     <a class="list-group-item" href="https://jaram.net/">Jaram</a>
                     <a class="list-group-item" href="https://github.com/Keunmo/jaram-attendance/">Github</a>
                     <a class="list-group-item">License</a>
@@ -52,7 +54,7 @@
                     <tr>
                         <td><b>등수</b></td>
                         <td><b>이름</b></td>
-                        <td><b>출석한 횟수</b></td>
+                        <td style="text-align: right;"><b>출석한 횟수</b></td>
                         <td><b>마지막 출석일</b></td>
                     </tr>
                     </thead>
@@ -62,7 +64,7 @@
                         <tr>
                             <td><script>document.write(num);</script></td>
                             <td>{{ member.name }}</td>
-                            <td>{{ member.atd_checked }}</td>
+                            <td style="text-align: right;">{{ member.atd_checked }}</td>
                             <td>{{ member.last_checked }}</td>
                             <script>num++;</script>
                         </tr>
