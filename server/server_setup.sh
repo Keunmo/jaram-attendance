@@ -1,4 +1,6 @@
 #! /bin/bash
+# export env variables
+export DJANGO_SETTINGS_MODULE=jaram_atd.settings.development
 
 # install mysql and python headers
 sudo apt install mysql-server libmysqlclient-dev python3-dev
@@ -25,8 +27,8 @@ fi
 echo "This warning is generated when using this script"
 
 # make new database
-
 read -p "Input database name to make : " db_name
+sudo mysql -uroot -p$root_passwd -e "create database $db_name"
 
 # allot previleges to user account
 
