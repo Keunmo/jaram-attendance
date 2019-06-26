@@ -163,9 +163,8 @@ def register_with_qrcode(request):
             print("Can't find Card ID.")
             return render(request, 'main/404.html')
 
-        reg_address = 'http://127.0.0.1:3000/register?id=' + card_id
-        # reg_address = 'http://attendance.jaram.net/register?id=' + card_id
-        print(reg_address)        
+        # reg_address = 'http://127.0.0.1:3000/register?id=' + card_id
+        reg_address = 'http://attendance.jaram.net/register?id=' + card_id        
 
         qr = qrcode.QRCode(
                 version=1,
@@ -181,6 +180,7 @@ def register_with_qrcode(request):
 
         img = qr.make_image()
         img.save('./main/static/qrimg/' + img_str, 'PNG')
+        img.save('./.static_root/qrimg/' + img_str, 'PNG')
         qr.clear()
 
         return render(request, 'main/qrcode.html', {'img_name': img_str})
