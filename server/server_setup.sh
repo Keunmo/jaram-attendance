@@ -41,7 +41,7 @@ SECRETKEY=$(python3 secretkey_gen.py)
 rm -r .config_secret
 mkdir .config_secret
 echo -e "{\"development\":{\"SECRET_KEY\":\"$SECRETKEY\",\"DATABASES\":{\"default\":{\"ENGINE\": \"django.db.backends.mysql\", \"NAME\": \"$db_name\", \"USER\": \"$new_account\", \"PASSWORD\": \"$new_passwd\", \"HOST\": \"localhost\", \"PORT\":\"\"}}}}" > .config_secret/server_info.json
-
+echo  "export DJANGO_SETTINGS_MODULE=jaram_atd.settings.development" >> ~/.bash_profile
 # migrate database
 
 python3 manage.py makemigrations main

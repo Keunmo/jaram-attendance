@@ -1,8 +1,8 @@
+setuptools
+wheel
 Django==2.1.7
 mysqlclient==1.4.2.post1
 Pillow==6.0.0
 PyMySQL==0.9.3
 pytz==2018.9
 qrcode==6.1
-setuptools
-wheel
