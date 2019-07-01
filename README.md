@@ -30,6 +30,14 @@ This project is Checking member's attendance via nfc
 
 ### For Hosting PC
 
+#### If you hosts on Ubuntu/Debian PC
+1. Run setup script
+
+```
+./server_setup.sh
+```
+
+#### Setup manually
 1. Open terminal(like UNIX system) or cmd(Windows)
 2. Move to directory that you want to clone repo
 3. Type this command to clone
@@ -45,8 +53,61 @@ git clone https://github.com/Keunmo/jaram-attendance
 cd server
 ```
 
-6. Install necessary library to operate by this command
+6. Install python virtualenv to activate virtualenv
+
+```
+sudo apt install python3-venv
+```
+
+```
+pip3 install virtualenv
+```
+
+7. create your own virtualenv
+
+```
+python3 -m venv <virualenv name>
+```
+
+8. activate your virtualenv
+
+```
+source <virtualenv name>/bin/activate
+```
+
+9. Install necessary library to operate by this command
 
 ```
 pip install --user -r requirement.txt
 ```
+
+10. make setting folder
+```
+rm -r .config_secret
+```
+
+```
+mkdir .config_secret
+```
+
+11. make secretkey randomly
+```
+python3 secretkey_gen.py
+```
+
+12. Copy generated secretkey
+13. make server_info.json
+echo -e "{\"development\":{\"SECRET_KEY\":\"<generated secretkey>\",\"DATABASES\":{\"default\":{\"ENGINE\": \"django.db.backends.mysql\", \"NAME\": \"<db_name>\", \"USER\": \"<new_account>", \"PASSWORD\": \"<new_passwd>", \"HOST\": \"localhost\", \"PORT\":\"\"}}}}" > .config_secret/server_info.json
+echo  "export DJANGO_SETTINGS_MODULE=jaram_atd.settings.development" >> ~/.bash_profile
+
+<generated scretkey> : generated secretkey from step 12
+<db_name> : database name in mysql server
+<new_account> : account for attendance
+<new_passwd> : password for account
+# migrate database
+
+python3 manage.py makemigrations main
+python3 manage.py migrate
+
+# create supersuer
+python3 manage.py createsuperuser
