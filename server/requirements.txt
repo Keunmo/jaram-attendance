@@ -6,3 +6,4 @@ Pillow==6.0.0
 PyMySQL==0.9.3
 pytz==2018.9
 qrcode==6.1
+gtts==2.0.3
