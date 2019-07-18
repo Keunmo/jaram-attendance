@@ -164,7 +164,7 @@ def register_with_qrcode(request):
             return render(request, 'main/404.html')
 
         # reg_address = 'http://127.0.0.1:3000/register?id=' + card_id
-        reg_address = 'http://attendance.jaram.net/register?id=' + card_id        
+        reg_address = 'https://attendance.jaram.net/register?id=' + card_id        
 
         qr = qrcode.QRCode(
                 version=1,
@@ -186,3 +186,25 @@ def register_with_qrcode(request):
         return render(request, 'main/qrcode.html', {'img_name': img_str})
 
     return render(request, 'main/404.html')
+
+def welcome_message(request):
+    if request.method == "GET":
+        card_id = request.GET.get('id', 'N')
+        if card_id == "N":
+            print("Can't find Card ID.")
+            return render(request, 'main/404.html')
+
+        decoded_id = base64.b64decode(card_id).decode('utf-8')
+
+        try:
+            mem_lookup = Member.objects.get(card_id=decoded_id)
+        except Member.DoesNotExist:
+            mem_lookup = []
+
+        if mem_lookup:
+            personnel = mem_lookup
+            return render(request, 'main/welcome.html', {'name': str(personnel)})
+
+        else:
+            print("Doesn't exists! Need to go to register page first.")
+            return render(request, 'main/404.html')
