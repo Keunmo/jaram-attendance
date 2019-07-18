@@ -186,3 +186,23 @@ def register_with_qrcode(request):
         return render(request, 'main/qrcode.html', {'img_name': img_str})
 
     return render(request, 'main/404.html')
+
+def welcome_message(request):
+    if request.method == "GET":
+        card_id = request.GET.get('id', 'N')
+        if card_id == "N":
+            print("Can't find Card ID.")
+            return render(request, 'main/404.html')
+        
+        try:
+            mem_lookup = Member.objects.get(card_id=card_id)
+        except Member.DoesNotExist:
+            mem_lookup = []
+
+        if mem_lookup:
+            personnel = mem_lookup
+            return render(request, 'main/welcome.html', {'name': str(personnel)})
+
+        else:
+            print("Doesn't exists! Need to go to register page first.")
+            return render(request, 'main/404.html')
