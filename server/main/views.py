@@ -193,9 +193,11 @@ def welcome_message(request):
         if card_id == "N":
             print("Can't find Card ID.")
             return render(request, 'main/404.html')
-        
+
+        decoded_id = base64.b64decode(card_id).decode('utf-8')
+
         try:
-            mem_lookup = Member.objects.get(card_id=card_id)
+            mem_lookup = Member.objects.get(card_id=decoded_id)
         except Member.DoesNotExist:
             mem_lookup = []
 
