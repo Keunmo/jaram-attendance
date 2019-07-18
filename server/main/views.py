@@ -164,7 +164,7 @@ def register_with_qrcode(request):
             return render(request, 'main/404.html')
 
         # reg_address = 'http://127.0.0.1:3000/register?id=' + card_id
-        reg_address = 'http://attendance.jaram.net/register?id=' + card_id        
+        reg_address = 'https://attendance.jaram.net/register?id=' + card_id        
 
         qr = qrcode.QRCode(
                 version=1,
