@@ -3,9 +3,11 @@
 export DJANGO_SETTINGS_MODULE=jaram_atd.settings.development
 
 # install mysql and python headers
-sudo apt install mysql-server libmysqlclient-dev python3-dev
+sudo apt install mysql-server libmysqlclient-dev python3-dev python3-venv
 
 # install required python libraries
+python3 -m venv myvenv
+source myvenv/bin/activate
 pip3 install --user -r requirements.txt
 
 # mysql root password setting

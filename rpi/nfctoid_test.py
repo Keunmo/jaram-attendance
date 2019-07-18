@@ -1,7 +1,8 @@
 from random import randint
-import requests,json,base64
+import requests,json,base64,time
 import registration
-
+from gtts import gTTS
+from playsound import playsound
 '''This code is only for testing. It returns fake nfc id.'''
 
 def scan_id():
@@ -18,11 +19,25 @@ def scan_id():
     r2 = s.post(url=url, headers={'X-CSRFToken': csrf_token}, data={'card_id': generated_id})
     print(r2.status_code, r2.reason)
     print(r2.text)
+    filename = 'temp.mp3'
+
 
     # Get status code and register
     if json.loads(r2.text)['status'] == 2:
         encoded_card_id = base64.b64encode(generated_id.encode('utf-8'))
+        text = "등록되지 않은 카드입니다. 등록이 필요합니다."
+        tts = gTTS(text=text,lang='ko')
+        f = open(filename, 'wb')
+        tts.write_to_fp(f)
+        f.close()
+        playsound(filename)
         registration.registration(encoded_card_id)
+    else:
     #return id[num]
-
+        text = json.loads(r2.text)['name'] + "님 환영합니다."
+        tts = gTTS(text=text,lang='ko')
+        f = open(filename, 'wb')
+        tts.write_to_fp(f)
+        f.close()
+        playsound(filename)
 scan_id() 
