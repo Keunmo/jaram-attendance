@@ -14,3 +14,4 @@ DATABASES = {
     'default': SETTING_PRD_DIC['DATABASES']["default"]
 }
 
+CSRF_COOKIE_DOMAIN = "attendance.jaram.net"
