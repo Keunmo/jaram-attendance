@@ -5,6 +5,9 @@ import board
 import busio
 import requests
 import gTTS
+import requests,json,base64,time
+import registration
+from playsound import playsound
 
 
 # harware reset
@@ -37,12 +40,13 @@ def scan_id():
         
         # Send card_id to server
         params = {'card_id': card_id}
-        url = 'http://127.0.0.1:8000/chulseokcheck'
+        url = 'http://attendance.jaram.net/chulseokcheck'
         s = requests.Session()
         r1 = s.get(url=url)
         csrf_token = r1.cookies['csrftoken']
-        r2 = s.post(url=url, headers={'X-CSRFToken': csrf_token}, data=json.dumps(params))
+        r2 = s.post(url=url, headers={'X-CSRFToken': csrf_token}, data={'card_id': generated_id})
         atd_status=r2.text
+        filename = 'temp.mp3'
         if atd_status['status'] == 0:
             # Already Checked Today
             already_checked()
@@ -62,8 +66,20 @@ def already_checked():
     pass
 
 def first_time_checked():
-    pass
+    text = json.loads(r2.text)['name'] + "님 환영합니다."
+    tts = gTTS(text=text,lang='ko')
+    f = open(filename, 'wb')
+    tts.write_to_fp(f)
+    f.close()
+    playsound(filename)
 
 def registration_mode():
-    pass
+    encoded_card_id = base64.b64encode(generated_id.encode('utf-8'))
+    text = "등록되지 않은 카드입니다. 등록이 필요합니다."
+    tts = gTTS(text=text,lang='ko')
+    f = open(filename, 'wb')
+    tts.write_to_fp(f)
+    f.close()
+    playsound(filename)
+    registration.registration(encoded_card_id)
 
