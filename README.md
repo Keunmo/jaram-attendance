@@ -10,7 +10,7 @@ This project is Checking member's attendance via nfc
 
 ![main](https://raw.githubusercontent.com/Taewan-P/jaram-attendance/master/img/main_ranking_page.png)
 
-![hardware](https://raw.githubusercontent.com/Taewan-P/jaram-attendance/master/img/hardware.jpeg)
+![hardware](https://raw.githubusercontent.com/Taewan-P/jaram-attendance/master/img/hardware.jpg)
 
 
 
