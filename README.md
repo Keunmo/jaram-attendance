@@ -2,6 +2,20 @@
 
 This project is Checking member's attendance via nfc
 
+
+
+## Images
+
+![login](https://raw.githubusercontent.com/Taewan-P/jaram-attendance/master/img/login_screen.png)
+
+![main](https://raw.githubusercontent.com/Taewan-P/jaram-attendance/master/img/main_ranking_page.png)
+
+![hardware](https://raw.githubusercontent.com/Taewan-P/jaram-attendance/master/img/hardware.jpeg)
+
+
+
+
+
 ## Prerequisites Hardware
 
 * PC for hosting website(Cloud computing service like gcp is also OK)
