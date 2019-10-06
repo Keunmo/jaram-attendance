@@ -14,7 +14,7 @@ This project is Checking member's attendance via nfc
 
 
 
-
+- Due to domain issues, to check the website out, press this [link](http://34.85.10.140/).
 
 ## Prerequisites Hardware
 
