@@ -2,7 +2,7 @@ setuptools
 wheel
 Django==2.2.13
 mysqlclient==1.4.2.post1
-Pillow==6.0.0
+Pillow==6.2.0
 PyMySQL==0.9.3
 pytz==2018.9
 qrcode==6.1
